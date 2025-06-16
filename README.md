@@ -12,6 +12,8 @@ TODO(armin): document the REST interface here
 TODO(armin): populate
 
 - Install uv
+- `uv sync`
+- `uv run pre-commit install`
 - Install docker
 - Edit name, description, authors in pyproject.toml
 - Edit other metadata in metadata.py
