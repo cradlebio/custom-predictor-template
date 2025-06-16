@@ -11,12 +11,12 @@ TODO(armin): document the REST interface here
 
 TODO(armin): populate
 
- - Install uv
- - Install docker
- - Edit name, description, authors in pyproject.toml
- - Edit other metadata in metadata.py
- - Build the actual logic in XXX.py
- - Docker build
+- Install uv
+- Install docker
+- Edit name, description, authors in pyproject.toml
+- Edit other metadata in metadata.py
+- Build the actual logic in XXX.py
+- Docker build
 
 ## Metadata
 
@@ -35,7 +35,7 @@ as defined above.
 Run `uv run tools/import.py` to import stuff the predictor into a workspace.
 Arguments are:
 
- * `--workspace_name=`: Provides the name of the workspace to import it into.
+- `--workspace_name=`: Provides the name of the workspace to import it into.
 
 If the predictor has been imported previously, then a new version will be
 imported.

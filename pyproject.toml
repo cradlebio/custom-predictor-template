@@ -10,8 +10,18 @@ readme = "README.md"
 requires-python = ">=3.12,<3.13"
 version = "1.0.0"
 
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.11.4",
+    "pyright>=1.1.402",
+    "pre-commit",
+]
+
 [project.scripts]
 server = "predictor.entrypoints.serve:serve"
 
 [tool.hatch.build]
 packages = ["predictor"]
+
+[tool.ruff]
+line-length = 120
