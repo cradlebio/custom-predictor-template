@@ -1,7 +1,8 @@
 class Processor:
     def __init__(self, params: dict[str, bool | int | float | str]):
         """Called at startup time with the parameter values for the parameters specified in metadata"""
-        del params
+        print(f"Hello {params['greeting']}!")
+        self._factor = float(params["factor"])
 
     def __call__(self, sequences: list[str], random_seed: int) -> list[tuple[float, ...]]:
         """Called for every batch of sequences.
@@ -11,4 +12,7 @@ class Processor:
         acids in the sequence.
         """
         del random_seed
-        return [(float(sequence.count("A")), float(sequence.count("E"))) for sequence in sequences]
+        return [
+            (self._factor * float(sequence.count("A")), self._factor * float(sequence.count("E")))
+            for sequence in sequences
+        ]
