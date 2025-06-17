@@ -19,6 +19,7 @@ dev-dependencies = [
 
 [project.scripts]
 server = "predictor.entrypoints.serve:serve"
+metadata = "predictor.entrypoints.metadata:dump_metadata"
 
 [tool.hatch.build]
 packages = ["predictor"]

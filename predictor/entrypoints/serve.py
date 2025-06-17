@@ -1,12 +1,11 @@
-from predictor import create_server, Response
-
-
-def bla(Request) -> Response:
-    return Response(scores=[])
+from predictor import create_server, Processor
+from predictor.metadata import CustomPredictorMetadata
 
 
 def serve():
-    with create_server(8000, bla) as server:
+    metadata = CustomPredictorMetadata()
+    processor = Processor({})  # TODO(armin): provide parameters
+    with create_server(8000, metadata.batch_size, processor) as server:
         server.serve_forever()
 
 

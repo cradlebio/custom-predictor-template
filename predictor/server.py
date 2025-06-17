@@ -3,16 +3,21 @@ import dataclasses
 import json
 from typing import Callable
 import functools
+from socket import socket
+
+
+MAX_SEQUENCE_LENGTH = 4096
 
 
 @dataclasses.dataclass
 class Request:
+    random_seed: int
     sequences: list[str]
 
 
 @dataclasses.dataclass
 class Response:
-    scores: list[list[float]]
+    scores: list[tuple[float, ...]]
 
 
 class BadRequestError(ValueError):
@@ -20,7 +25,15 @@ class BadRequestError(ValueError):
 
 
 class _Handler(BaseHTTPRequestHandler):
-    def __init__(self, request, client_address, server, processor: Callable[[Request], Response]):
+    def __init__(
+        self,
+        request: socket | tuple[bytes, socket],
+        client_address: tuple[str, int],
+        server: HTTPServer,
+        batch_size: int,
+        processor: Callable[[list[str], int], list[tuple[float, ...]]],
+    ):
+        self._batch_size = batch_size
         self._processor = processor
         super().__init__(request, client_address, server)
 
@@ -62,9 +75,10 @@ class _Handler(BaseHTTPRequestHandler):
         field_values = {}
         fields = dataclasses.fields(Request)
         for field in fields:
-            val = decoded.get(field.name)
-            if field.default != dataclasses.MISSING and val is None:
-                raise BadRequestError(f"Field `{field.name}` is missing")
+            field_name = field.name.replace("_", "-")
+            val = decoded.get(field_name)
+            if field.default == dataclasses.MISSING and val is None:
+                raise BadRequestError(f"Field `{field_name}` is missing")
             field_values[field.name] = val
 
         try:
@@ -72,10 +86,15 @@ class _Handler(BaseHTTPRequestHandler):
         except TypeError as ex:
             raise BadRequestError(f"Failed to construct request: {ex}") from ex
 
-        # TODO(armin): check number of sequences against batch size
+        if len(request.sequences) > self._batch_size:
+            raise BadRequestError(f"Provided more sequences than max batch size ({self._batch_size})")
+        if any(len(seq) > MAX_SEQUENCE_LENGTH for seq in request.sequences):
+            raise BadRequestError(f"Maximum sequence length exceeded ({MAX_SEQUENCE_LENGTH})")
 
-        return self._processor(request)
+        return Response(scores=self._processor(request.sequences, request.random_seed))
 
 
-def create_server(port: int, processor: Callable[[Request], Response]) -> HTTPServer:
-    return HTTPServer(("", 8000), functools.partial(_Handler, processor=processor))
+def create_server(
+    port: int, batch_size: int, processor: Callable[[list[str], int], list[tuple[float, ...]]]
+) -> HTTPServer:
+    return HTTPServer(("", 8000), functools.partial(_Handler, batch_size=batch_size, processor=processor))
