@@ -1,5 +1,9 @@
+from predictor import create_server
+
+
 def serve():
-    print("hi222")
+    with create_server(8000) as server:
+        server.serve_forever()
 
 
 if __name__ == "__main__":
