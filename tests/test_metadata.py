@@ -1,5 +1,6 @@
-from predictor import CustomPredictorMetadata
 import re
+
+from predictor import CustomPredictorMetadata
 
 MAX_NAME_LENGTH = 64
 MAX_DESCRIPTION_LENGTH = 1024
