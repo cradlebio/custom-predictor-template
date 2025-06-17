@@ -95,6 +95,6 @@ class _Handler(BaseHTTPRequestHandler):
 
 
 def create_server(
-    port: int, batch_size: int, processor: Callable[[list[str], int], list[tuple[float, ...]]]
+    endpoint: tuple[str, int], batch_size: int, processor: Callable[[list[str], int], list[tuple[float, ...]]]
 ) -> HTTPServer:
-    return HTTPServer(("", 8000), functools.partial(_Handler, batch_size=batch_size, processor=processor))
+    return HTTPServer(endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor))

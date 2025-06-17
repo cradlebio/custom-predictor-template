@@ -7,7 +7,7 @@ METADATA = CustomPredictorMetadata()
 
 
 @pytest.mark.parametrize("batch_size", [1, METADATA.batch_size // 2, METADATA.batch_size])
-def test_predictor(batch_size: int):
+def test_predictor(batch_size: int, test_params: dict[str, bool | int | float | str]):
     TEST_PARAMS = {
         "greeting": "Hello",
         "factor": 1.2,

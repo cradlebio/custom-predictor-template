@@ -23,7 +23,7 @@ def serve():
     args = parser.parse_args()
 
     processor = Processor(vars(args))
-    with create_server(8000, metadata.batch_size, processor) as server:
+    with create_server(("", 8000), metadata.batch_size, processor) as server:
         server.serve_forever()
 
 

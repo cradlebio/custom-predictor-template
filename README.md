@@ -18,7 +18,7 @@ TODO(armin): populate
 - Edit name, description, authors in pyproject.toml
 - Edit other metadata in metadata.py
 - Build the actual logic in processor.py
-- Run `uv run server` to run it locally, possibly passing parameters
+- Run `uv run server` to run it locally, possibly passing parameters, curl instructions to hit it
 - Docker build
 
 ## Metadata
