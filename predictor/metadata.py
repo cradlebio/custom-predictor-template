@@ -27,8 +27,12 @@ class CustomPredictorMetadata:
     """Metadata for the custom predictor, used for importing into Cradle
 
     Args:
-        name: Name of the custom predictor
+        name: Name of the custom predictor with which it will be registered in Cradle.
+              Must only consist of lowercase letters, numbers and the '-' character.
+        display_name: Human-readable name of the predictor.
+        description: Description of what the predictor does
         author: Author of the custom predictor (in the format `First Last <email@domain.tld>`)
+        url: Optional field to set a URL where to find more information about the predictor
         inputs: A tuple of inputs that must be provided to the custom predictor when starting
                 a task that uses it.
         outputs: Outputs of the custom predictor. The length of this tuple specifies the number
@@ -41,7 +45,10 @@ class CustomPredictorMetadata:
     """
 
     name: str = NAME
+    display_name: str = NAME.replace("-", " ").title()
+    description: str = "This predictor counts the occurence of A and E amino acids in a sequence"
     author: str = importlib.metadata.metadata(NAME)["Author-email"]
+    url: str | None = None
     inputs: tuple[CustomPredictorInput, ...] = (
         CustomPredictorInput(name="factor", type=float, default=1.0),
         CustomPredictorInput(name="greeting", type=str),

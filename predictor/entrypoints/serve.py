@@ -1,5 +1,4 @@
-from predictor import create_server, Processor
-from predictor.metadata import CustomPredictorMetadata
+from predictor import create_server, Processor, CustomPredictorMetadata
 import argparse
 
 

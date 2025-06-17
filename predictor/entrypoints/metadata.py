@@ -1,6 +1,6 @@
 import dataclasses
 
-from predictor.metadata import CustomPredictorMetadata
+from predictor import CustomPredictorMetadata
 
 
 def dump_metadata():

@@ -4,3 +4,4 @@ from .server import (
 from .processor import (
     Processor as Processor,
 )
+from .metadata import CustomPredictorMetadata as CustomPredictorMetadata

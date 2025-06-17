@@ -14,7 +14,8 @@ version = "1.0.0"
 dev-dependencies = [
     "ruff>=0.11.4",
     "pyright>=1.1.402",
-    "pre-commit",
+    "pre-commit>=2.9.2",
+    "pytest>=8.4.0",
 ]
 
 [project.scripts]
