@@ -4,7 +4,7 @@ class Processor:
         self._factor = float(params["factor"])
         self._subseq = str(params["subseq"])
 
-    def __call__(self, sequences: list[str], random_seed: int) -> list[tuple[float, ...]]:
+    def __call__(self, sequences: list[str], random_seed: int) -> list[list[float]]:
         """Called for every batch of sequences.
 
         This example predictor has two outputs. The first output is the number of A
@@ -13,6 +13,6 @@ class Processor:
         """
         del random_seed
         return [
-            (self._factor * float(sequence.count("A")), self._factor * float(sequence.count(self._subseq)))
+            [self._factor * float(sequence.count("A")), self._factor * float(sequence.count(self._subseq))]
             for sequence in sequences
         ]

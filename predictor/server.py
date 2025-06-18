@@ -17,7 +17,12 @@ class Request:
 
 @dataclasses.dataclass
 class Response:
-    scores: list[tuple[float, ...]]
+    scores: list[list[float]]
+
+
+@dataclasses.dataclass
+class ErrorResponse:
+    detail: str
 
 
 class BadRequestError(ValueError):
@@ -31,7 +36,7 @@ class _Handler(BaseHTTPRequestHandler):
         client_address: tuple[str, int],
         server: HTTPServer,
         batch_size: int,
-        processor: Callable[[list[str], int], list[tuple[float, ...]]],
+        processor: Callable[[list[str], int], list[list[float]]],
     ):
         self._batch_size = batch_size
         self._processor = processor
@@ -50,12 +55,14 @@ class _Handler(BaseHTTPRequestHandler):
         try:
             response = self._process(payload)
         except BadRequestError as ex:
-            text = str(ex).encode("utf-8")
+            error_response = ErrorResponse(detail=str(ex))
+            response_text = json.dumps(error_response, default=dataclasses.asdict).encode("utf-8")
+
             self.send_response(400)
-            self.send_header("Content-Type", "text/plain")
-            self.send_header("Content-Length", f"{len(text)}")
+            self.send_header("Content-Type", "application/problem+json")
+            self.send_header("Content-Length", f"{len(response_text)}")
             self.end_headers()
-            self.wfile.write(text)
+            self.wfile.write(response_text)
         else:
             response_text = json.dumps(response, default=dataclasses.asdict).encode("utf-8")
 
@@ -95,6 +102,6 @@ class _Handler(BaseHTTPRequestHandler):
 
 
 def create_server(
-    endpoint: tuple[str, int], batch_size: int, processor: Callable[[list[str], int], list[tuple[float, ...]]]
+    endpoint: tuple[str, int], batch_size: int, processor: Callable[[list[str], int], list[list[float]]]
 ) -> HTTPServer:
     return HTTPServer(endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor))
