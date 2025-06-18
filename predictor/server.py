@@ -56,22 +56,22 @@ class _Handler(BaseHTTPRequestHandler):
             response = self._process(payload)
         except BadRequestError as ex:
             error_response = ErrorResponse(detail=str(ex))
-            response_text = json.dumps(error_response, default=dataclasses.asdict).encode("utf-8")
-
-            self.send_response(400)
-            self.send_header("Content-Type", "application/problem+json")
-            self.send_header("Content-Length", f"{len(response_text)}")
-            self.end_headers()
-            self.wfile.write(response_text)
+            self._send_response(400, "application/problem+json", json.dumps(error_response, default=dataclasses.asdict))
+        except Exception as ex:
+            error_response = ErrorResponse(detail=str(ex))
+            self._send_response(500, "application/problem+json", json.dumps(error_response, default=dataclasses.asdict))
         else:
-            response_text = json.dumps(response, default=dataclasses.asdict).encode("utf-8")
+            self._send_response(200, "application/json", json.dumps(response, default=dataclasses.asdict))
 
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json")
-            self.send_header("Content-Length", f"{len(response_text)}")
-            self.end_headers()
+    def _send_response(self, status_code: int, content_type: str, content: str):
+        response_bytes = content.encode("utf-8")
 
-            self.wfile.write(response_text)
+        self.send_response(status_code)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", f"{len(response_bytes)}")
+        self.end_headers()
+
+        self.wfile.write(response_bytes)
 
     def _process(self, payload: bytes) -> Response:
         try:

@@ -54,7 +54,7 @@ def test_server_only():
     assert scores == [list(x) for x in TEST_SCORES]
 
 
-def test_too_many_sequences():
+def test_client_error():
     def _dummy_processor(sequences: list[str], random_seed: int) -> list[list[float]]:
         return []
 
@@ -68,6 +68,20 @@ def test_too_many_sequences():
     assert excinfo.value.headers["Content-Type"] == "application/problem+json"
     response = json.loads(excinfo.value.fp.read().decode("utf-8"))
     assert "detail" in response
+
+
+def test_server_error():
+    def _dummy_processor(sequences: list[str], random_seed: int) -> list[list[float]]:
+        raise RuntimeError("Some error")
+
+    with pytest.raises(urllib.error.HTTPError) as excinfo:
+        _test_server(24, _dummy_processor, TEST_SEQUENCES)
+
+    assert excinfo.value.code == 500
+    assert excinfo.value.headers["Content-Type"] == "application/problem+json"
+    response = json.loads(excinfo.value.fp.read().decode("utf-8"))
+    assert "detail" in response
+    assert response["detail"] == "Some error"
 
 
 def test_server_with_processor(test_params: dict[str, bool | int | float | str]):
