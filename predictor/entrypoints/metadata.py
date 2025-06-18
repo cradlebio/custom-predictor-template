@@ -1,17 +1,21 @@
 import dataclasses
+import json
+import sys
 
 from predictor import CustomPredictorMetadata
 
 
+def _json_normalize(x):
+    if dataclasses.is_dataclass(x):
+        return dataclasses.asdict(x)  # pyright: ignore[reportArgumentType]
+    if isinstance(x, type):
+        return x.__name__
+    raise TypeError(x)
+
+
 def dump_metadata():
     metadata = CustomPredictorMetadata()
-    for field in dataclasses.fields(metadata):
-        if isinstance(field.default, (list, tuple)):
-            print(f"{field.name}:")
-            for elem in field.default:
-                print(f"  {elem}")
-        else:
-            print(f"{field.name}: {field.default}")
+    json.dump(metadata, sys.stdout, indent=4, default=_json_normalize)
 
 
 if __name__ == "__main__":

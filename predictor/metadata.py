@@ -51,9 +51,9 @@ class CustomPredictorMetadata:
     url: str | None = None
     inputs: tuple[CustomPredictorInput, ...] = (
         CustomPredictorInput(name="factor", type=float, default=1.0),
-        CustomPredictorInput(name="greeting", type=str),
+        CustomPredictorInput(name="subseq", type=str),
     )
-    outputs: tuple[str, ...] = ("As", "Es")
+    outputs: tuple[str, ...] = ("As", "Subseqs")
     batch_size: int = 1024
     cpu_mcores: int = 100
     main_memory_mib: int = 128

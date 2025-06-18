@@ -25,6 +25,8 @@ def test_metadata():
     assert len(metadata.outputs) > 0
     assert len(metadata.outputs) <= MAX_OUTPUTS
 
+    assert all(x.type in (bool, int, float, str) for x in metadata.inputs)
+
     assert metadata.cpu_mcores > 0
     assert metadata.cpu_mcores <= MAX_CPU_MCORES
     assert metadata.main_memory_mib > 0

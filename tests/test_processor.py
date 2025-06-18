@@ -8,11 +8,6 @@ METADATA = CustomPredictorMetadata()
 
 @pytest.mark.parametrize("batch_size", [1, METADATA.batch_size // 2, METADATA.batch_size])
 def test_predictor(batch_size: int, test_params: dict[str, bool | int | float | str]):
-    TEST_PARAMS = {
-        "greeting": "Hello",
-        "factor": 1.2,
-    }
-
     TEST_SEQUENCES = {
         "HLSEFQHALLETPCNTERMLMQICWIAAMN",
         "HLSEFQHARLETPCNTERMLMQICWIAAMN",
@@ -22,7 +17,7 @@ def test_predictor(batch_size: int, test_params: dict[str, bool | int | float | 
         "NLSEFQHARLETPCNTNRMLMQICWIAAMN",
     }
 
-    processor = Processor(TEST_PARAMS)
+    processor = Processor(test_params)
     input_iter = itertools.batched(itertools.cycle(TEST_SEQUENCES), batch_size)
     sequences = list(next(input_iter))
     assert len(sequences) == batch_size
