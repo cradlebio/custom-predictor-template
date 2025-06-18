@@ -10,6 +10,13 @@ readme = "README.md"
 requires-python = ">=3.12,<3.13"
 version = "1.0.0"
 
+# If the project needs third-party packages, declare them as dependencies here,
+# for example:
+#
+# dependencies = [
+#   "numpy>=2.1"
+# ]
+
 [tool.uv]
 dev-dependencies = [
     "ruff>=0.11.4",
@@ -21,6 +28,7 @@ dev-dependencies = [
 [project.scripts]
 server = "predictor.entrypoints.serve:serve"
 metadata = "predictor.entrypoints.metadata:dump_metadata"
+build = "predictor.entrypoints.build:build"
 
 [tool.hatch.build]
 packages = ["predictor"]

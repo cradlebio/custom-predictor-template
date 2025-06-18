@@ -96,7 +96,7 @@ To start working with this predictor, perform the following steps:
       curl -H 'Content-Type: application/json' \
            -d '{"sequences": ["BLA", "BLUB", "CRADLE"], "random-seed": 2}' \
            -X POST \
-           http://localhost:8000/predict
+           http://localhost:8080/predict
       ```
 
 7. Run `uv run pytest` to run unit tests for the predictor. The unit tests
@@ -107,6 +107,13 @@ To start working with this predictor, perform the following steps:
 8. Run `uv run build` to build a docker image of the predictor. This needs
    [Docker Engine](https://docs.docker.com/engine/) (Docker CE) or
    [Docker Desktop](https://docs.docker.com/desktop/) to be installed.
+
+   1. The created image will have the same name as the predictor, in this
+      case "custom-predictor-template". It can then be run as follows:
+
+      ```sh
+      docker run --rm -it -p 8080:8080 custom-predictor-template:latest --subseq=E
+      ```
 
 ### Modifying the predictor
 
