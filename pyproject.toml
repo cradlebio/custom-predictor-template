@@ -29,6 +29,7 @@ dev-dependencies = [
 server = "predictor.entrypoints.serve:serve"
 metadata = "predictor.entrypoints.metadata:dump_metadata"
 build = "predictor.entrypoints.build:build"
+import = "predictor.entrypoints.build:import_to_cradle"
 
 [tool.hatch.build]
 packages = ["predictor"]
