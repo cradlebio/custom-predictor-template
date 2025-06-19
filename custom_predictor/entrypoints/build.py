@@ -1,10 +1,11 @@
 import os
 import subprocess
+from pathlib import Path
 
 from custom_predictor import CustomPredictorMetadata
 
 
-def top_level_path() -> str:
+def top_level_path() -> Path:
     if __package__ is None:
         raise ValueError(
             "This functionality must be called from within a package. "
@@ -13,15 +14,15 @@ def top_level_path() -> str:
         )
 
     packages = __package__.split(".")
-    cur_dir = os.path.dirname(__file__)
+    cur_dir = Path(__file__).parent
     for _ in packages:
-        cur_dir = os.path.dirname(cur_dir)
+        cur_dir = cur_dir.parent
     return cur_dir
 
 
 def build_args() -> list[str]:
     metadata = CustomPredictorMetadata()
-    return ["docker", "build", top_level_path(), "-t", metadata.name]
+    return ["docker", "build", str(top_level_path()), "-t", metadata.name]
 
 
 def build_docker_image():
@@ -32,7 +33,7 @@ def build_docker_image():
 
 
 def import_to_cradle():
-    cwd = top_level_path()
+    cwd = str(top_level_path())
 
     # Make sure git is clean
     out = subprocess.run(["git", "status", "--porcelain"], stdout=subprocess.PIPE, cwd=cwd)
