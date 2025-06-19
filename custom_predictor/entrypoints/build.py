@@ -6,7 +6,11 @@ from custom_predictor import CustomPredictorMetadata
 
 def top_level_path() -> str:
     if __package__ is None:
-        raise ValueError("top_level_path() must be called from within a package")
+        raise ValueError(
+            "This functionality must be called from within a package. "
+            "Try calling the build-docker-image or import-to-cradle entry points, "
+            "e.g. `uv run build-docker-image`."
+        )
 
     packages = __package__.split(".")
     cur_dir = os.path.dirname(__file__)

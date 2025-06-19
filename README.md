@@ -104,7 +104,7 @@ To start working with this predictor, perform the following steps:
    it also invokes it with some example sequences and checks that the
    predictor output conforms to the contract specified above.
 
-8. Run `uv run build` to build a docker image of the predictor. This needs
+8. Run `uv run build-docker-image` to build a docker image of the predictor. This needs
    [Docker Engine](https://docs.docker.com/engine/) (Docker CE) or
    [Docker Desktop](https://docs.docker.com/desktop/) to be installed.
 
@@ -139,6 +139,6 @@ When the business logic of the predictor is ready, it can be imported into a Cra
 workspace. Make sure that [Docker Engine](https://docs.docker.com/engine/) or
 [Docker Desktop](https://docs.docker.com/desktop/) are installed.
 
-To import it, simply run `uv run import --workspace=<workspace-name>`.
+To import it, simply run `uv run import-to-cradle --workspace=<workspace-name>`.
 If the predictor has been imported previously, a new version of it will be
 created.
