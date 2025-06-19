@@ -47,9 +47,9 @@ The response to this request should have HTTP status code 200 and provide one
 scalar floating point value per sequence and per predictor output (as defined
 in the metadata). The response contains a JSON body with the folowing fields:
 
-- `scores`: A 2-dimensional array of shape `num_sequences × num_outputs`,
-   each scalar being of floating point type. `num_outputs` in the inner dimension
-   and `num_sequences` the outer dimension.
+- `scores`: A list-of-list representing a 2-dimensional array of shape
+   `num_sequences × num_outputs`, each scalar being of floating point type.
+   `num_outputs` in the inner dimension and `num_sequences` the outer dimension.
 
 In case the request could not be processed, the response should contain a HTTP status
 code in the 4xx or 5xx range and a JSON-formatted body according to
@@ -57,7 +57,7 @@ code in the 4xx or 5xx range and a JSON-formatted body according to
 
 ## Getting Started
 
-This repository implements a simple custom predictor with two input parameters and two
+This repository implements an example custom predictor with two input parameters and two
 outputs.
 
 The first input parameter (named "factor") is a floating point parameter which
@@ -87,14 +87,14 @@ To start working with this predictor, perform the following steps:
 
 5. Run `uv run metadata` to dump the predictor's metadata.
 
-6. Run `uv run server --subseq=E` to run the predictor with the "subseq"
+6. Run `uv run custom-predictor --subseq=E` to run the predictor with the "subseq"
    input parameter set to the string "E".
 
    1. At this point you can use a HTTP client to query the predictor, e.g. with `curl`:
 
       ```sh
       curl -H 'Content-Type: application/json' \
-           -d '{"sequences": ["BLA", "BLUB", "CRADLE"], "random-seed": 2}' \
+           -d '{"sequences": ["CR", "CRAD", "CRADLE"], "random-seed": 2}' \
            -X POST \
            http://localhost:8080/predict
       ```

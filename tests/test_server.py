@@ -7,7 +7,7 @@ import itertools
 
 import pytest
 
-from predictor import create_server, Processor, CustomPredictorMetadata
+from custom_predictor import create_server, Processor, CustomPredictorMetadata
 
 
 TEST_SEQUENCES = ["C", "CR", "CRAD", "CRADLE"]

@@ -5,7 +5,7 @@ import dataclasses
 NAME = "custom-predictor-template"
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class CustomPredictorInput:
     """Specifies an input parameter for a custom predictor.
 
@@ -22,7 +22,7 @@ class CustomPredictorInput:
     default: None | bool | int | float | str = None
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class CustomPredictorMetadata:
     """Metadata for the custom predictor, used for importing into Cradle
 
@@ -46,7 +46,7 @@ class CustomPredictorMetadata:
 
     name: str = NAME
     display_name: str = NAME.replace("-", " ").title()
-    description: str = "This predictor counts the occurence of A and E amino acids in a sequence"
+    description: str = "This predictor counts the occurence of A and other amino acid subsequences in a sequence"
     author: str = importlib.metadata.metadata(NAME)["Author-email"]
     url: str | None = None
     inputs: tuple[CustomPredictorInput, ...] = (

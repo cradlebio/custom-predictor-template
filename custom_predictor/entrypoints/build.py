@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from predictor import CustomPredictorMetadata
+from custom_predictor import CustomPredictorMetadata
 
 
 def top_level_path() -> str:
@@ -20,7 +20,7 @@ def build_args() -> list[str]:
     return ["docker", "build", top_level_path(), "-t", metadata.name]
 
 
-def build():
+def build_docker_image():
     args = build_args()
     print(" ".join(args))
 
@@ -28,14 +28,14 @@ def build():
 
 
 def import_to_cradle():
-    os.chdir(top_level_path())
+    cwd = top_level_path()
 
     # Make sure git is clean
-    out = subprocess.run(["git", "status", "--porcelain"], stdout=subprocess.PIPE)
+    out = subprocess.run(["git", "status", "--porcelain"], stdout=subprocess.PIPE, cwd=cwd)
     if len(out.stdout) > 0:
         raise ValueError("Repository has uncommitted changes, please commit before importing the predictor")
 
-    out = subprocess.run(["uv", "run", "pytest"])
+    out = subprocess.run(["uv", "run", "pytest"], cwd=cwd)
     if out.returncode != 0:
         raise ValueError("Not all tests are passing")
 

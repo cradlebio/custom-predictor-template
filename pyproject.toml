@@ -3,12 +3,12 @@ build-backend = "hatchling.build"
 requires = ["hatchling"]
 
 [project]
-authors = [{email = "eng@cradle.bio", name = "Cradle"}]
+authors = [{email = "partnerships@cradle.bio", name = "Cradle"}]
 description = "A template for a simple Cradle custom predictor"
 name = "custom-predictor-template"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-version = "1.0.0"
+version = "0.1.0"
 
 # If the project needs third-party packages, declare them as dependencies here,
 # for example:
@@ -26,13 +26,13 @@ dev-dependencies = [
 ]
 
 [project.scripts]
-server = "predictor.entrypoints.serve:serve"
-metadata = "predictor.entrypoints.metadata:dump_metadata"
-build = "predictor.entrypoints.build:build"
-import = "predictor.entrypoints.build:import_to_cradle"
+custom-predictor = "custom_predictor.entrypoints.serve:serve"
+metadata = "custom_predictor.entrypoints.metadata:dump_metadata"
+build-docker-image = "custom_predictor.entrypoints.build:build_docker_image"
+import = "custom_predictor.entrypoints.build:import_to_cradle"
 
 [tool.hatch.build]
-packages = ["predictor"]
+packages = ["custom_predictor"]
 
 [tool.ruff]
 line-length = 120

@@ -12,4 +12,4 @@ RUN --mount=type=ssh \
     uv lock --locked && uv sync --no-dev
 
 EXPOSE 8080/tcp
-ENTRYPOINT ["/app/.venv/bin/server"]
+ENTRYPOINT ["/app/.venv/bin/custom-predictor"]

@@ -1,7 +1,7 @@
 import itertools
 import pytest
 
-from predictor import CustomPredictorMetadata, Processor
+from custom_predictor import CustomPredictorMetadata, Processor
 
 METADATA = CustomPredictorMetadata()
 

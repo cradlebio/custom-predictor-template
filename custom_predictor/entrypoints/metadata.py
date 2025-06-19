@@ -2,7 +2,7 @@ import dataclasses
 import json
 import sys
 
-from predictor import CustomPredictorMetadata
+from custom_predictor import CustomPredictorMetadata
 
 
 def _json_normalize(x):

@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import dataclasses
 import json
-from typing import Callable
+from collections.abc import Callable
 import functools
 from socket import socket
 

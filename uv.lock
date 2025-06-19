@@ -22,7 +22,7 @@ wheels = [
 
 [[package]]
 name = "custom-predictor-template"
-version = "1.0.0"
+version = "0.1.0"
 source = { editable = "." }
 
 [package.dev-dependencies]
