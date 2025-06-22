@@ -6,18 +6,10 @@ from custom_predictor import CustomPredictorMetadata
 
 
 def top_level_path() -> Path:
-    if __package__ is None:
-        raise ValueError(
-            "This functionality must be called from within a package. "
-            "Try calling the build-docker-image or import-to-cradle entry points, "
-            "e.g. `uv run build-docker-image`."
-        )
-
-    packages = __package__.split(".")
-    cur_dir = Path(__file__).parent
-    for _ in packages:
-        cur_dir = cur_dir.parent
-    return cur_dir
+    out = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"], stdout=subprocess.PIPE, cwd=str(Path(__file__).parent), check=True
+    )
+    return Path(out.stdout.decode("utf-8").strip())
 
 
 def build_args() -> list[str]:
@@ -36,7 +28,7 @@ def import_to_cradle():
     cwd = str(top_level_path())
 
     # Make sure git is clean
-    out = subprocess.run(["git", "status", "--porcelain"], stdout=subprocess.PIPE, cwd=cwd)
+    out = subprocess.run(["git", "status", "--porcelain"], stdout=subprocess.PIPE, cwd=cwd, check=True)
     if len(out.stdout) > 0:
         raise ValueError("Repository has uncommitted changes, please commit before importing the predictor")
 
