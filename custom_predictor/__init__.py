@@ -3,5 +3,6 @@ from ._server import (
 )
 from ._processor import (
     Processor as Processor,
+    METADATA as METADATA,
 )
 from ._metadata import CustomPredictorMetadata as CustomPredictorMetadata

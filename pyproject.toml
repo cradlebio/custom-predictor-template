@@ -7,7 +7,7 @@ authors = [{email = "partnerships@cradle.bio", name = "Cradle"}]
 description = "A template for a simple Cradle custom predictor"
 name = "custom-predictor-template"
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.12"
 version = "0.1.0"
 
 # If the project needs third-party packages, declare them as dependencies here,

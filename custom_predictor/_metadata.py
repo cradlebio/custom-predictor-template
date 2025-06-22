@@ -1,8 +1,4 @@
-import importlib.metadata
 import dataclasses
-
-
-NAME = "custom-predictor-template"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -44,17 +40,14 @@ class CustomPredictorMetadata:
         gpu_memory_mib: GPU memory, in MiB, to make available to the custom predictor at runtime
     """
 
-    name: str = NAME
-    display_name: str = NAME.replace("-", " ").title()
-    description: str = "This predictor counts the occurence of A and other amino acid subsequences in a sequence"
-    author: str = importlib.metadata.metadata(NAME)["Author-email"]
-    url: str | None = None
-    inputs: tuple[CustomPredictorInput, ...] = (
-        CustomPredictorInput(name="factor", type=float, default=1.0),
-        CustomPredictorInput(name="subseq", type=str),
-    )
-    outputs: tuple[str, ...] = ("As", "Subseqs")
-    batch_size: int = 1024
-    cpu_mcores: int = 100
-    main_memory_mib: int = 128
-    gpu_memory_mib: int = 0
+    name: str
+    display_name: str
+    description: str
+    author: str
+    url: str | None
+    inputs: tuple[CustomPredictorInput, ...]
+    outputs: tuple[str, ...]
+    batch_size: int
+    cpu_mcores: int
+    main_memory_mib: int
+    gpu_memory_mib: int

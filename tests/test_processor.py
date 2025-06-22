@@ -1,9 +1,7 @@
 import itertools
 import pytest
 
-from custom_predictor import CustomPredictorMetadata, Processor
-
-METADATA = CustomPredictorMetadata()
+from custom_predictor import Processor, METADATA
 
 
 @pytest.mark.parametrize("batch_size", [1, METADATA.batch_size // 2, METADATA.batch_size])

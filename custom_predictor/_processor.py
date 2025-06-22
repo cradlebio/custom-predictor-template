@@ -1,3 +1,25 @@
+from ._metadata import CustomPredictorMetadata, CustomPredictorInput
+
+NAME = "custom-predictor-template"
+
+METADATA = CustomPredictorMetadata(
+    name=NAME,
+    display_name=NAME.replace("-", " ").title(),
+    description="This predictor counts the occurence of A and other amino acid subsequences in a sequence",
+    author="Cradle <partnerships@cradle.bio>",
+    url=None,
+    inputs=(
+        CustomPredictorInput(name="factor", type=float, default=1.0),
+        CustomPredictorInput(name="subseq", type=str),
+    ),
+    outputs=("As", "Subseqs"),
+    batch_size=1024,
+    cpu_mcores=100,
+    main_memory_mib=128,
+    gpu_memory_mib=0,
+)
+
+
 class Processor:
     def __init__(self, params: dict[str, bool | int | float | str]):
         """Called at startup time with the parameter values for the parameters specified in metadata"""

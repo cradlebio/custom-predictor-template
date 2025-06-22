@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 
-from custom_predictor import CustomPredictorMetadata
+from custom_predictor import METADATA
 
 
 def top_level_path() -> Path:
@@ -12,8 +12,7 @@ def top_level_path() -> Path:
 
 
 def build_args() -> list[str]:
-    metadata = CustomPredictorMetadata()
-    return ["docker", "build", str(top_level_path()), "-t", metadata.name]
+    return ["docker", "build", str(top_level_path()), "-t", METADATA.name]
 
 
 def build_docker_image():

@@ -2,7 +2,7 @@ import dataclasses
 import json
 import sys
 
-from custom_predictor import CustomPredictorMetadata
+from custom_predictor import METADATA
 
 
 def _json_normalize(x):
@@ -14,8 +14,7 @@ def _json_normalize(x):
 
 
 def dump_metadata():
-    metadata = CustomPredictorMetadata()
-    json.dump(metadata, sys.stdout, indent=4, default=_json_normalize)
+    json.dump(METADATA, sys.stdout, indent=4, default=_json_normalize)
 
 
 if __name__ == "__main__":

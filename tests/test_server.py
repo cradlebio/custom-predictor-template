@@ -7,7 +7,7 @@ import itertools
 
 import pytest
 
-from custom_predictor import create_server, Processor, CustomPredictorMetadata
+from custom_predictor import create_server, Processor, METADATA
 
 
 TEST_SEQUENCES = ["C", "CR", "CRAD", "CRADLE"]
@@ -85,8 +85,7 @@ def test_server_error():
 
 
 def test_server_with_processor(test_params: dict[str, bool | int | float | str]):
-    metadata = CustomPredictorMetadata()
-    batch_size = metadata.batch_size
+    batch_size = METADATA.batch_size
     print(batch_size)
 
     processor = Processor(test_params)
@@ -99,5 +98,5 @@ def test_server_with_processor(test_params: dict[str, bool | int | float | str])
 
     assert len(scores) == len(sequences)
     for result in scores:
-        assert len(result) == len(metadata.outputs)
+        assert len(result) == len(METADATA.outputs)
         assert all(isinstance(x, float) for x in result)

@@ -1,4 +1,4 @@
-from custom_predictor import create_server, Processor, CustomPredictorMetadata
+from custom_predictor import create_server, Processor, METADATA
 import argparse
 
 
@@ -12,9 +12,8 @@ def bool_parser(v):
 
 
 def serve():
-    metadata = CustomPredictorMetadata()
     parser = argparse.ArgumentParser()
-    for inp in metadata.inputs:
+    for inp in METADATA.inputs:
         TYPEMAP = {int: int, str: str, float: float, bool: bool_parser}
         if inp.default is not None:
             parser.add_argument(f"--{inp.name}", type=TYPEMAP[inp.type], default=inp.default)
@@ -23,7 +22,7 @@ def serve():
     args = parser.parse_args()
 
     processor = Processor(vars(args))
-    with create_server(("", 8080), metadata.batch_size, processor) as server:
+    with create_server(("", 8080), METADATA.batch_size, processor) as server:
         server.serve_forever()
 
 

@@ -122,16 +122,15 @@ modifying this template, through the following steps:
 
 1. Edit the predictor name and author(s) in the `pyproject.toml` file.
 
-2. Edit other metadata in the `predictor/metadata.py` file.
+2. Edit other metadata and build the actual logic in the
+   `predictor/processor.py` file. If you need to add additional python
+   dependencies, add them to the `pyproject.toml` file and install them
+   through `uv sync`.
 
-3. Build the actual logic in the `predictor/processor.py` file. If you need
-   to add additional python dependencies, add them to the `pyproject.toml`
-   file and install them through `uv sync`.
-
-4. In `tests/conftest.py`, specify the input parameters to be used for the
+3. In `tests/conftest.py`, specify the input parameters to be used for the
    unit test. Make sure running the unit test (with `uv run pytest`) passes.
 
-5. Add additional unit tests for your business logic if desired.
+4. Add additional unit tests for your business logic if desired.
 
 ### Importing the custom predictor to Cradle
 
