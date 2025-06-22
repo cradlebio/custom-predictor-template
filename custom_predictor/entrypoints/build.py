@@ -1,4 +1,3 @@
-import os
 import subprocess
 from pathlib import Path
 
@@ -21,7 +20,7 @@ def build_docker_image():
     args = build_args()
     print(" ".join(args))
 
-    os.execvp(args[0], args)
+    return subprocess.run(args).returncode
 
 
 def import_to_cradle():
