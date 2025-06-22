@@ -47,7 +47,7 @@ The response to this request should have HTTP status code 200 and provide one
 scalar floating point value per sequence and per predictor output (as defined
 in the metadata). The response contains a JSON body with the folowing fields:
 
-- `scores`: A list-of-list representing a 2-dimensional array of shape
+- `scores`: An array-of-arrays representing a 2-dimensional array of shape
    `num_sequences × num_outputs`, each scalar being of floating point type.
    `num_outputs` in the inner dimension and `num_sequences` the outer dimension.
 
