@@ -8,7 +8,7 @@ in Python, and tooling to import it into a Cradle workspace.
 In order for Cradle to use a custom predictor, it must adhere to this contract.
 A custom predictor is a Docker container which, when run, responds to HTTP
 requests asking for predictions to be made for one or more sequences. When importing
-the predictor into the Cradle platform (in order to make it available to tasks
+the custom predictor into the Cradle platform (in order to make it available to tasks
 launched on it), the Docker image must be provided together with metadata describing
 certain aspects of it.
 
@@ -23,13 +23,13 @@ imported into a Cradle workspace. The metadata consist of the following fields:
   in user interfaces such as reports.
 - `description`: A description of what the descriptor does
 - `inputs`: A list of input parameters, types and default values
-- `outputs`: A list of output names that the predictor generates for each sequence
+- `outputs`: A list of output names that the custom predictor generates for each sequence
    (there must be at least one output)
-- `batch_size`: How many sequences the predictor can be invoked with at a time
-- `cpu_mcores`: How much CPU compute the predictor consumes per invocation, in
+- `batch_size`: How many sequences the custom predictor can be invoked with at a time
+- `cpu_mcores`: How much CPU compute the custom predictor consumes per invocation, in
    millicores
-- `main_memory_mib`: How much RAM the predictor consumes per invocation, in MiB
-- `gpu_memory_mib`: How much GPU memory the predictor consumes per invocation, in MiB
+- `main_memory_mib`: How much RAM the custom predictor consumes per invocation, in MiB
+- `gpu_memory_mib`: How much GPU memory the custom predictor consumes per invocation, in MiB
 
 These metadata serve three purposes:
 
@@ -43,9 +43,9 @@ These metadata serve three purposes:
 ### Input parameters
 
 The input parameters of the custom predictors are assigned values when launching a task
-using the predictor and then provided as command line arguments to the predictor in the
-form `--name=value`. Input parameter values must be of type `bool`, `int`, `float` or
-`str`.
+using the custom predictor and then provided as command line arguments to the custom
+predictor in the form `--name=value`. Input parameter values must be of type `bool`,
+`int`, `float` or `str`.
 
 ### REST interface
 
@@ -79,12 +79,12 @@ The first input parameter (named "factor") is a floating point parameter which
 all outputs are multiplied with. The second input parameter (named "subseq") is an amino
 acid sequence which is searched for in the sequences to be predicted.
 
-The first output of the predictor, named "As" is the number of "A" amino acids in the
+The first output of the custom predictor, named "As" is the number of "A" amino acids in the
 provided sequence. The second output, named "Subseqs" is the number of
 subsequences as specified by the "subseq" parameter that occur in the provided sequence.
 Both outputs are multiplied by the "factor" value before the final output.
 
-To start working with this predictor, perform the following steps:
+To start working with this custom predictor, perform the following steps:
 
 1. Create a fork of this repository
 
@@ -96,11 +96,12 @@ To start working with this predictor, perform the following steps:
 4. Run `uv run pre-commit install` to install the pre-commit hooks that
    provide linting and typechecking of the Python code.
 
-5. Run `uv run build-docker-image` to build a docker image of the predictor. This needs
+5. Run `uv run build-docker-image` to build a docker image containing the
+   custom predictor. This needs
    [Docker Engine](https://docs.docker.com/engine/) (Docker CE) or
    [Docker Desktop](https://docs.docker.com/desktop/) to be installed.
 
-   1. The created image will have the same name as the predictor, in this
+   1. The created image will have the same name as the custom predictor, in this
       case "custom-predictor-template". It can then be run as follows (with
       the "subseq" input parameter set to the string "E"):
 
@@ -108,7 +109,7 @@ To start working with this predictor, perform the following steps:
       docker run --rm -it -p 8080:8080 custom-predictor-template:latest --subseq=E
       ```
 
-   2. At this point you can use a HTTP client to query the predictor, e.g. with `curl`:
+   2. At this point you can use a HTTP client to query the custom predictor, e.g. with `curl`:
 
       ```sh
       curl -H 'Content-Type: application/json' \
@@ -117,12 +118,12 @@ To start working with this predictor, perform the following steps:
            http://localhost:8080/predict
       ```
 
-### Modifying the predictor
+### Modifying the custom predictor
 
 The easiest way to build your own custom predictor for Cradle is by
 modifying this template, through the following steps:
 
-1. Edit the predictor name and author(s) in the `pyproject.toml` file.
+1. Edit the custom predictor name and author(s) in the `pyproject.toml` file.
 
 2. Edit other metadata and build the actual logic in the
    `custom_predictor/_processor.py` file. If you need to add additional python
@@ -133,23 +134,23 @@ modifying this template, through the following steps:
       outside of a docker containec with `uv run custom-predictor --subseq=E`
       for faster iteration.
 
-3. Run `uv run metadata` to dump the predictor's metadata (for human inspection
-   purposes only).
+3. Run `uv run metadata` to dump the custom predictor's metadata (for human
+   inspection purposes only).
 
 4. In `tests/conftest.py`, specify the input parameters to be used for the
    unit test. Make sure running the unit test (with `uv run pytest`) passes.
-   The unit tests make sure that the metadata for the predictor contains valid
+   The unit tests make sure that the metadata for the custom predictor contains valid
    values and it also invokes it with some example sequences and checks that the
-   predictor output conforms to the contract specified above.
+   custom predictor output conforms to the contract specified above.
 
 5. Add additional unit tests for your business logic if desired.
 
 ### Importing the custom predictor to Cradle
 
-When the business logic of the predictor is ready, it can be imported into a Cradle
+When the business logic of the custom predictor is ready, it can be imported into a Cradle
 workspace. Make sure that [Docker Engine](https://docs.docker.com/engine/) or
 [Docker Desktop](https://docs.docker.com/desktop/) are installed.
 
 To import it, simply run `uv run import-to-cradle --workspace=<workspace-name>`.
-If the predictor has been imported previously, a new version of it will be
+If the custom predictor has been imported previously, a new version of it will be
 created.
