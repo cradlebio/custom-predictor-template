@@ -26,13 +26,13 @@ dev-dependencies = [
 ]
 
 [project.scripts]
-custom-predictor = "custom_predictor.entrypoints.serve:serve"
-metadata = "custom_predictor.entrypoints.metadata:dump_metadata"
-build-docker-image = "custom_predictor.entrypoints.build:build_docker_image"
-import = "custom_predictor.entrypoints.build:import_to_cradle"
+custom-predictor = "scaffolding.entrypoints.serve:serve"
+metadata = "scaffolding.entrypoints.metadata:dump_metadata"
+build-docker-image = "scaffolding.entrypoints.build:build_docker_image"
+import = "scaffolding.entrypoints.build:import_to_cradle"
 
 [tool.hatch.build]
-packages = ["custom_predictor"]
+packages = ["scaffolding", "custom_predictor"]
 
 [tool.ruff]
 line-length = 120

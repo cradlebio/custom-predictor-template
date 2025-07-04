@@ -1,4 +1,4 @@
-from ._metadata import CustomPredictorMetadata, CustomPredictorInput
+from scaffolding import CustomPredictorMetadata, CustomPredictorInput
 
 NAME = "custom-predictor-template"
 
