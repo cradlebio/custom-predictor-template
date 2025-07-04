@@ -39,7 +39,7 @@ port 8080. It should expose an endpoint at /predict where it accepts POST reques
 with a JSON body containing the following fields:
 
 - `sequences`: A list of strings representing the sequences for which to create
-   predictions. Strings can contain the 20 standard amino acids and `|` as a separator
+   predictions. Strings can contain the 20 standard amino acids and `:` as a separator
    token in case of multimers.
 - `random-seed`: An integer that can be used as a random seed.
 
