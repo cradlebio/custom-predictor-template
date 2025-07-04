@@ -91,43 +91,30 @@ To start working with this predictor, perform the following steps:
 2. Install the [uv](https://docs.astral.sh/uv/getting-started/installation/) tool
    if you don't have it yet.
 
-3. Run `uv sync` to install the correct Python version and dependencies. The
-   predictor itself does not use any dependencies other than the Python standard
-   libraries, but dependencies can easily be added in the `pyproject.toml`
-   configuration file. It does use some dev-dependencies that are only used
-   during development (e.g. ruff, pyright, pre-commit, pytest).
+3. Run `uv sync` to install the correct Python version and dependencies.
 
 4. Run `uv run pre-commit install` to install the pre-commit hooks that
    provide linting and typechecking of the Python code.
 
-5. Run `uv run metadata` to dump the predictor's metadata.
+5. Run `uv run build-docker-image` to build a docker image of the predictor. This needs
+   [Docker Engine](https://docs.docker.com/engine/) (Docker CE) or
+   [Docker Desktop](https://docs.docker.com/desktop/) to be installed.
 
-6. Run `uv run custom-predictor --subseq=E` to run the predictor with the "subseq"
-   input parameter set to the string "E".
+   1. The created image will have the same name as the predictor, in this
+      case "custom-predictor-template". It can then be run as follows (with
+      the "subseq" input parameter set to the string "E"):
 
-   1. At this point you can use a HTTP client to query the predictor, e.g. with `curl`:
+      ```sh
+      docker run --rm -it -p 8080:8080 custom-predictor-template:latest --subseq=E
+      ```
+
+   2. At this point you can use a HTTP client to query the predictor, e.g. with `curl`:
 
       ```sh
       curl -H 'Content-Type: application/json' \
            -d '{"sequences": ["CR", "CRAD", "CRADLE"], "random-seed": 2}' \
            -X POST \
            http://localhost:8080/predict
-      ```
-
-7. Run `uv run pytest` to run unit tests for the predictor. The unit tests
-   make sure that the metadata for the predictor contains valid values and
-   it also invokes it with some example sequences and checks that the
-   predictor output conforms to the contract specified above.
-
-8. Run `uv run build-docker-image` to build a docker image of the predictor. This needs
-   [Docker Engine](https://docs.docker.com/engine/) (Docker CE) or
-   [Docker Desktop](https://docs.docker.com/desktop/) to be installed.
-
-   1. The created image will have the same name as the predictor, in this
-      case "custom-predictor-template". It can then be run as follows:
-
-      ```sh
-      docker run --rm -it -p 8080:8080 custom-predictor-template:latest --subseq=E
       ```
 
 ### Modifying the predictor
@@ -142,10 +129,20 @@ modifying this template, through the following steps:
    dependencies, add them to the `pyproject.toml` file and install them
    through `uv sync`.
 
-3. In `tests/conftest.py`, specify the input parameters to be used for the
-   unit test. Make sure running the unit test (with `uv run pytest`) passes.
+   1. During development of the custom predictor logic, you can run it
+      outside of a docker containec with `uv run custom-predictor --subseq=E`
+      for faster iteration.
 
-4. Add additional unit tests for your business logic if desired.
+3. Run `uv run metadata` to dump the predictor's metadata (for human inspection
+   purposes only).
+
+4. In `tests/conftest.py`, specify the input parameters to be used for the
+   unit test. Make sure running the unit test (with `uv run pytest`) passes.
+   The unit tests make sure that the metadata for the predictor contains valid
+   values and it also invokes it with some example sequences and checks that the
+   predictor output conforms to the contract specified above.
+
+5. Add additional unit tests for your business logic if desired.
 
 ### Importing the custom predictor to Cradle
 
