@@ -26,7 +26,7 @@ dev-dependencies = [
 ]
 
 [tool.hatch.build]
-packages = ["scaffolding", "custom_predictor"]
+packages = ["custom_predictor"]
 
 [tool.ruff]
 line-length = 120

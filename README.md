@@ -27,11 +27,13 @@ imported into a Cradle workspace. The metadata consist of the following fields:
   reference this custom predictor from tasks.
 - `display_name`: A human-readable name of the custom predictor which is displayed
   in user interfaces such as reports.
-- `description`: A description of what the descriptor does
-- `inputs`: A list of input parameters, types and default values
+- `description`: A human-readable description of what the descriptor does.
+- `inputs`: A list of input parameters, types and default values. See
+   [Input parameters](#input-parameters) below.
 - `outputs`: A list of output names that the custom predictor generates for each sequence
    (there must be at least one output)
-- `batch_size`: How many sequences the custom predictor can be invoked with at a time
+- `batch_size`: The maximum number of sequences that the custom predictor will be
+   invoked with at a time. It can be invoked with fewer sequences.
 - `cpu_mcores`: How much CPU compute the custom predictor consumes per invocation, in
    millicores
 - `main_memory_mib`: How much RAM the custom predictor consumes per invocation, in MiB
@@ -48,10 +50,11 @@ These metadata serve three purposes:
 
 ### Input parameters
 
-The input parameters of the custom predictors are assigned values when launching a task
-using the custom predictor and then provided as command line arguments to the custom
-predictor in the form `--name=value`. Input parameter values must be of type `bool`,
-`int`, `float` or `str`.
+Input parameters are global parameters that remain the same for every sequence that the
+custom predictor is invoked with. They are assigned values when a task is launched
+from the Cradle platform that uses the custom predictor. The parameters are then provided
+as command line arguments to the custom predictor in the form `--name=value`. Input parameter
+values must be of type `bool`, `int`, `float` or `str`.
 
 ### REST interface
 
@@ -74,4 +77,6 @@ in the metadata). The response contains a JSON body with the folowing fields:
 
 In case the request could not be processed, the response should contain a HTTP status
 code in the 4xx or 5xx range and a JSON-formatted body according to
-[RFC9457](https://www.rfc-editor.org/rfc/rfc9457.html).
+[RFC9457](https://www.rfc-editor.org/rfc/rfc9457.html). The error detail will then be
+surfaced in the Cradle API and/or UI from which the task using a custom predictor
+was launched.

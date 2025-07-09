@@ -4,7 +4,6 @@ import json
 
 class _AlanineCounter(http.server.BaseHTTPRequestHandler):
     def do_POST(self):
-        print("begin")
         if self.path != "/predict":
             self.send_response(404)
             self.end_headers()

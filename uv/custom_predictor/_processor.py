@@ -1,4 +1,4 @@
-from scaffolding import CustomPredictorMetadata, CustomPredictorInput, CustomPredictorOutput, AbstractProcessor
+from ._scaffolding import CustomPredictorMetadata, CustomPredictorInput, CustomPredictorOutput, AbstractProcessor
 
 NAME = "custom-predictor-template"
 

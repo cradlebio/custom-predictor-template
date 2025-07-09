@@ -1,5 +1,5 @@
 from ._processor import Processor, METADATA
-from scaffolding import run
+from ._scaffolding import run
 
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@ def _json_normalize(x):
 
 def build(metadata: CustomPredictorMetadata, output_directory: Path):
     output_directory.mkdir(parents=True, exist_ok=True)
-    cwd = Path(__file__).parents[1]
+    cwd = Path(__file__).parents[2]
 
     out = subprocess.run(["uv", "run", "pytest"], cwd=cwd)
     if out.returncode != 0:

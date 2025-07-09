@@ -7,7 +7,7 @@ import itertools
 import pytest
 
 from custom_predictor._processor import Processor, METADATA
-from scaffolding._server import create_server, AbstractProcessor
+from custom_predictor._scaffolding._server import create_server, AbstractProcessor
 
 
 TEST_SEQUENCES = ["C", "CR", "CRAD", "CRADLE"]
