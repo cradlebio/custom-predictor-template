@@ -1,0 +1,13 @@
+{
+    "name": "custom-predictor-template",
+    "display_name": "Custom Predictor Template",
+    "description": "Counts the number of alanine amino acids in the sequence",
+    "author": "Cradle <partnerships@cradle.bio>",
+    "url": null,
+    "inputs": [],
+    "outputs": [{"id": "alanine_count", "name": "Alanine count"}],
+    "batch_size": 1024,
+    "cpu_mcores": 100,
+    "main_memory_mib": 128,
+    "gpu_memory_mib": 0
+}

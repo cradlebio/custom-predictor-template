@@ -25,12 +25,6 @@ dev-dependencies = [
     "pytest>=8.4.0",
 ]
 
-[project.scripts]
-custom-predictor = "scaffolding.entrypoints.serve:serve"
-metadata = "scaffolding.entrypoints.metadata:dump_metadata"
-build-docker-image = "scaffolding.entrypoints.build:build_docker_image"
-import = "scaffolding.entrypoints.build:import_to_cradle"
-
 [tool.hatch.build]
 packages = ["scaffolding", "custom_predictor"]
 

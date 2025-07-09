@@ -1,4 +1,4 @@
-from scaffolding import CustomPredictorMetadata, CustomPredictorInput
+from scaffolding import CustomPredictorMetadata, CustomPredictorInput, CustomPredictorOutput, AbstractProcessor
 
 NAME = "custom-predictor-template"
 
@@ -12,7 +12,10 @@ METADATA = CustomPredictorMetadata(
         CustomPredictorInput(name="factor", type=float, default=1.0),
         CustomPredictorInput(name="subseq", type=str),
     ),
-    outputs=("As", "Subseqs"),
+    outputs=(
+        CustomPredictorOutput(id="alanine_count", name="Alanine count"),
+        CustomPredictorOutput(id="subseq_count", name="Subsequence count"),
+    ),
     batch_size=1024,
     cpu_mcores=100,
     main_memory_mib=128,
@@ -20,7 +23,7 @@ METADATA = CustomPredictorMetadata(
 )
 
 
-class Processor:
+class Processor(AbstractProcessor):
     def __init__(self, params: dict[str, bool | int | float | str]):
         """Called at startup time with the parameter values for the parameters specified in metadata"""
         self._factor = float(params["factor"])

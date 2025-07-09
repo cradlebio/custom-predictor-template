@@ -5,7 +5,7 @@ repos:
       - id: ruff-format
         name: ruff-format
         description: "Run 'ruff format'."
-        entry: uv run ruff format --force-exclude
+        entry: "bash -c 'cd uv && uv run ruff format --force-exclude'"
         language: python
         types_or: [python, pyi, jupyter]
         require_serial: true
@@ -14,7 +14,7 @@ repos:
     hooks:
       - id: ruff
         name: ruff
-        entry: uv run ruff check --force-exclude --fix
+        entry: "bash -c 'cd uv && uv run ruff check --force-exclude --fix'"
         language: python
         types_or: [python, pyi]
         require_serial: true
@@ -29,7 +29,7 @@ repos:
     hooks:
       - id: pyright
         name: pyright
-        entry: uv run pyright
+        entry: "bash -c 'cd uv && uv run pyright'"
         language: python
         types: [python]
         require_serial: true

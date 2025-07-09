@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import dataclasses
 import json
-from collections.abc import Callable
+from abc import ABC, abstractmethod
 import functools
 from socket import socket
 
@@ -29,6 +29,12 @@ class BadRequestError(ValueError):
     pass
 
 
+class AbstractProcessor(ABC):
+    @abstractmethod
+    def __call__(self, sequences: list[str], random_seed: int) -> list[list[float]]:
+        pass
+
+
 class _Handler(BaseHTTPRequestHandler):
     def __init__(
         self,
@@ -36,7 +42,7 @@ class _Handler(BaseHTTPRequestHandler):
         client_address: tuple[str, int],
         server: HTTPServer,
         batch_size: int,
-        processor: Callable[[list[str], int], list[list[float]]],
+        processor: AbstractProcessor,
     ):
         self._batch_size = batch_size
         self._processor = processor
@@ -101,7 +107,5 @@ class _Handler(BaseHTTPRequestHandler):
         return Response(scores=self._processor(request.sequences, request.random_seed))
 
 
-def create_server(
-    endpoint: tuple[str, int], batch_size: int, processor: Callable[[list[str], int], list[list[float]]]
-) -> HTTPServer:
+def create_server(endpoint: tuple[str, int], batch_size: int, processor: AbstractProcessor) -> HTTPServer:
     return HTTPServer(endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor))

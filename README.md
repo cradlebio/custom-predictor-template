@@ -1,11 +1,17 @@
 # Cradle Custom Predictor
 
-This Repository contains a template for creating a Cradle custom predictor
-in Python, and tooling to import it into a Cradle workspace.
+This Repository contains templates for creating a Cradle custom predictor.
+It provides the following templates:
+
+- [minimal](minimal): This is a minimal custom predictor written in Python.
+- [uv](uv): A more elaborate example that uses the `uv` package manager
+   and demonstrates additional features.
 
 ## Custom predictor contract
 
-In order for Cradle to use a custom predictor, it must adhere to this contract.
+In order for Cradle to use a custom predictor, it must adhere to this contract,
+which is implemented by all templates in this repository.
+
 A custom predictor is a Docker container which, when run, responds to HTTP
 requests asking for predictions to be made for one or more sequences. When importing
 the custom predictor into the Cradle platform (in order to make it available to tasks
@@ -69,88 +75,3 @@ in the metadata). The response contains a JSON body with the folowing fields:
 In case the request could not be processed, the response should contain a HTTP status
 code in the 4xx or 5xx range and a JSON-formatted body according to
 [RFC9457](https://www.rfc-editor.org/rfc/rfc9457.html).
-
-## Getting Started
-
-This repository implements an example custom predictor with two input parameters and two
-outputs.
-
-The first input parameter (named "factor") is a floating point parameter which
-all outputs are multiplied with. The second input parameter (named "subseq") is an amino
-acid sequence which is searched for in the sequences to be predicted.
-
-The first output of the custom predictor, named "As" is the number of "A" amino acids in the
-provided sequence. The second output, named "Subseqs" is the number of
-subsequences as specified by the "subseq" parameter that occur in the provided sequence.
-Both outputs are multiplied by the "factor" value before the final output.
-
-To start working with this custom predictor, perform the following steps:
-
-1. Create a fork of this repository
-
-2. Install the [uv](https://docs.astral.sh/uv/getting-started/installation/) tool
-   if you don't have it yet.
-
-3. Run `uv sync` to install the correct Python version and dependencies.
-
-4. Run `uv run pre-commit install` to install the pre-commit hooks that
-   provide linting and typechecking of the Python code.
-
-5. Run `uv run build-docker-image` to build a docker image containing the
-   custom predictor. This needs
-   [Docker Engine](https://docs.docker.com/engine/) (Docker CE) or
-   [Docker Desktop](https://docs.docker.com/desktop/) to be installed.
-
-   1. The created image will have the same name as the custom predictor, in this
-      case "custom-predictor-template". It can then be run as follows (with
-      the "subseq" input parameter set to the string "E"):
-
-      ```sh
-      docker run --rm -it -p 8080:8080 custom-predictor-template:latest --subseq=E
-      ```
-
-   2. At this point you can use a HTTP client to query the custom predictor, e.g. with `curl`:
-
-      ```sh
-      curl -H 'Content-Type: application/json' \
-           -d '{"sequences": ["CR", "CRAD", "CRADLE"], "random-seed": 2}' \
-           -X POST \
-           http://localhost:8080/predict
-      ```
-
-### Modifying the custom predictor
-
-The easiest way to build your own custom predictor for Cradle is by
-modifying this template, through the following steps:
-
-1. Edit the custom predictor name and author(s) in the `pyproject.toml` file.
-
-2. Edit other metadata and build the actual logic in the
-   `custom_predictor/_processor.py` file. If you need to add additional python
-   dependencies, add them to the `pyproject.toml` file and install them
-   through `uv sync`.
-
-   1. During development of the custom predictor logic, you can run it
-      outside of a docker containec with `uv run custom-predictor --subseq=E`
-      for faster iteration.
-
-3. Run `uv run metadata` to dump the custom predictor's metadata (for human
-   inspection purposes only).
-
-4. In `tests/conftest.py`, specify the input parameters to be used for the
-   unit test. Make sure running the unit test (with `uv run pytest`) passes.
-   The unit tests make sure that the metadata for the custom predictor contains valid
-   values and it also invokes it with some example sequences and checks that the
-   custom predictor output conforms to the contract specified above.
-
-5. Add additional unit tests for your business logic if desired.
-
-### Importing the custom predictor to Cradle
-
-When the business logic of the custom predictor is ready, it can be imported into a Cradle
-workspace. Make sure that [Docker Engine](https://docs.docker.com/engine/) or
-[Docker Desktop](https://docs.docker.com/desktop/) are installed.
-
-To import it, simply run `uv run import-to-cradle --workspace=<workspace-name>`.
-If the custom predictor has been imported previously, a new version of it will be
-created.

@@ -19,6 +19,19 @@ class CustomPredictorInput:
 
 
 @dataclasses.dataclass(frozen=True)
+class CustomPredictorOutput:
+    """Specifies an output of a custom predictor.
+
+    Args:
+        id: A unique ID for the output.
+        name:  A human-readable name for the output, surfaced in UI and reports.
+    """
+
+    id: str
+    name: str
+
+
+@dataclasses.dataclass(frozen=True)
 class CustomPredictorMetadata:
     """Metadata for the custom predictor, used for importing into Cradle
 
@@ -46,7 +59,7 @@ class CustomPredictorMetadata:
     author: str
     url: str | None
     inputs: tuple[CustomPredictorInput, ...]
-    outputs: tuple[str, ...]
+    outputs: tuple[CustomPredictorOutput, ...]
     batch_size: int
     cpu_mcores: int
     main_memory_mib: int
