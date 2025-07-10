@@ -12,7 +12,7 @@ It provides the following templates:
 In order for Cradle to use a custom predictor, it must adhere to this contract,
 which is implemented by all templates in this repository.
 
-A custom predictor is a Docker container which, when run, responds to HTTP
+A custom predictor is a linux/amd64 Docker container which, when run, responds to HTTP
 requests asking for predictions to be made for one or more sequences. When importing
 the custom predictor into the Cradle platform (in order to make it available to tasks
 launched on it), the Docker image must be provided together with metadata describing
@@ -33,7 +33,7 @@ imported into a Cradle workspace. The metadata consist of the following fields:
 - `outputs`: A list of output names that the custom predictor generates for each sequence
    (there must be at least one output)
 - `batch_size`: The maximum number of sequences that the custom predictor will be
-   invoked with at a time. It can be invoked with fewer sequences.
+   invoked with at a time. It may be invoked with fewer sequences.
 - `cpu_mcores`: How much CPU compute the custom predictor consumes per invocation, in
    millicores
 - `main_memory_mib`: How much RAM the custom predictor consumes per invocation, in MiB

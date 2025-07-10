@@ -2,7 +2,7 @@
 
 This directory contains a minimal custom predictor written in Python.
 The predictor counts the number of Alanine amino acids in the input
-sequence(s). The logic is contained in `custom_prodictor.py`. Metadata
+sequence(s). The logic is contained in `custom_predictor.py`. Metadata
 is supplied in the `metadata.json` file.
 
 ## Building
@@ -15,7 +15,8 @@ To start building the custom predictor, perform the following steps:
    [Docker Desktop](https://docs.docker.com/desktop/) are installed.
 
 3. Build the docker image by running `docker build . --platform linux/amd64 -t minimal-custom-predictor-template`
-   from this directory.
+   from this directory. The linux/amd64 platform is required to run the custom predictor
+   on Cradle's infrastructure.
 
    1. If you are running a linux/amd64 system, the image can then be run locally as follows:
 
