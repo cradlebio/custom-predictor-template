@@ -1,0 +1,32 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project]
+authors = [{email = "partnerships@cradle.bio", name = "Cradle"}]
+description = "A template for a simple Cradle custom predictor"
+name = "custom-predictor-template"
+readme = "README.md"
+requires-python = ">=3.12"
+version = "0.1.0"
+
+# If the project needs third-party packages, declare them as dependencies here,
+# for example:
+#
+# dependencies = [
+#   "numpy>=2.1"
+# ]
+
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.11.4",
+    "pyright>=1.1.402",
+    "pre-commit>=2.9.2",
+    "pytest>=8.4.0",
+]
+
+[tool.hatch.build]
+packages = ["custom_predictor"]
+
+[tool.ruff]
+line-length = 120
