@@ -15,7 +15,7 @@ class _AlanineCounter(http.server.BaseHTTPRequestHandler):
         outputs = []
         for sequence in sequences:
             outputs.append([sequence.count("A")])
-        output = json.dumps(outputs).encode()
+        output = json.dumps({"scores": outputs}).encode()
         self.send_response(200)
         self.end_headers()
         self.wfile.write(output)
