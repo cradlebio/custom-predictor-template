@@ -9,12 +9,12 @@ METADATA = CustomPredictorMetadata(
     author="Cradle <partnerships@cradle.bio>",
     url=None,
     inputs=(
-        CustomPredictorInput(name="factor", type=float, default=1.0),
+        CustomPredictorInput(name="factor", type=float, default_value=1.0),
         CustomPredictorInput(name="subseq", type=str),
     ),
     outputs=(
-        CustomPredictorOutput(id="alanine_count", name="Alanine count"),
-        CustomPredictorOutput(id="subseq_count", name="Subsequence count"),
+        CustomPredictorOutput(assay_id="alanine_count", name="Alanine count"),
+        CustomPredictorOutput(assay_id="subseq_count", name="Subsequence count"),
     ),
     batch_size=1024,
     cpu_mcores=100,
