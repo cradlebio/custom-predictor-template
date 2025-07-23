@@ -31,8 +31,8 @@ def run(metadata: CustomPredictorMetadata, processor_factory: Callable[[dict], A
     serve_parser = subparsers.add_parser("serve")
     for inp in metadata.inputs:
         TYPEMAP = {int: int, str: str, float: float, bool: bool_parser}
-        if inp.default is not None:
-            serve_parser.add_argument(f"--{inp.name}", type=TYPEMAP[inp.type], default=inp.default)
+        if inp.default_value is not None:
+            serve_parser.add_argument(f"--{inp.name}", type=TYPEMAP[inp.type], default=inp.default_value)
         else:
             serve_parser.add_argument(f"--{inp.name}", type=TYPEMAP[inp.type], required=True)
 

@@ -5,7 +5,7 @@
     "author": "Cradle <partnerships@cradle.bio>",
     "url": null,
     "inputs": [],
-    "outputs": [{"id": "alanine_count", "name": "Alanine count"}],
+    "outputs": [{"assay_id": "alanine_count", "name": "Alanine count"}],
     "batch_size": 1024,
     "cpu_mcores": 100,
     "main_memory_mib": 128,

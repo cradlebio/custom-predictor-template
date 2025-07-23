@@ -10,12 +10,12 @@ class CustomPredictorInput:
     Args:
         name: The name of the input parameter.
         type: The data type of the parameter. Must be one of `bool`, `int`, `float` or `str`.
-        default: The default value of the parameter, or `None` to make it a required parameter.
+        default_value: The default value of the parameter, or `None` to make it a required parameter.
     """
 
     name: str
     type: type[bool | int | float | str]
-    default: None | bool | int | float | str = None
+    default_value: None | bool | int | float | str = None
 
 
 @dataclasses.dataclass(frozen=True)
@@ -23,11 +23,11 @@ class CustomPredictorOutput:
     """Specifies an output of a custom predictor.
 
     Args:
-        id: A unique ID for the output.
+        assay_id: A unique ID for the output.
         name:  A human-readable name for the output, surfaced in UI and reports.
     """
 
-    id: str
+    assay_id: str
     name: str
 
 
