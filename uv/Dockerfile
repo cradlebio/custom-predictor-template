@@ -7,7 +7,8 @@ ENV UV_NO_MODIFY_PATH=1
 RUN curl -LsSf https://astral.sh/uv/0.7.19/install.sh | sh
 
 WORKDIR /app
-COPY . /app
+COPY custom_predictor /app/custom_predictor/
+COPY pyproject.toml uv.lock README.md /app
 
 ENV UV_CACHE_DIR="/app/.cache/uv"
 ENV UV_COMPILE_BYTECODE=1
