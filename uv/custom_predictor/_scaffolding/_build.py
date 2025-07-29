@@ -19,14 +19,29 @@ def build(metadata: CustomPredictorMetadata, output_directory: Path):
     output_directory.mkdir(parents=True, exist_ok=True)
     cwd = Path(__file__).parents[2]
 
-    out = subprocess.run(["uv", "run", "pytest"], cwd=cwd)
-    if out.returncode != 0:
-        raise ValueError("Not all tests are passing")
-
     with open(output_directory / "metadata.json", "w") as f:
         json.dump(metadata, f, indent=4, default=_json_normalize)
 
     subprocess.run(["docker", "build", ".", "--platform", "linux/amd64", "-t", metadata.name], cwd=cwd, check=True)
+
+    out = subprocess.run(
+        [
+            "docker",
+            "run",
+            "--rm",
+            "-it",
+            "-v",
+            f"{cwd / 'tests'}:/app/tests:ro",
+            "--entrypoint",
+            "uv",
+            metadata.name,
+            "run",
+            "pytest",
+        ],
+        cwd=cwd,
+    )
+    if out.returncode != 0:
+        raise ValueError("Not all tests are passing")
 
     subprocess.run(
         [
