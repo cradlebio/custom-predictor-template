@@ -80,3 +80,8 @@ code in the 4xx or 5xx range and a JSON-formatted body according to
 [RFC9457](https://www.rfc-editor.org/rfc/rfc9457.html). The error detail will then be
 surfaced in the Cradle API and/or UI from which the task using a custom predictor
 was launched.
+
+Cradle only submits a single request at a time to a custom predictor instance, and so
+the custom predictor does not need to support concurrent requests. However, while a
+request is pending, it might connect to the server without making a request to probe
+for its liveness/existence.

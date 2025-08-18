@@ -1,4 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from concurrent.futures import ThreadPoolExecutor
 import dataclasses
 import json
 from abc import ABC, abstractmethod
@@ -33,6 +34,27 @@ class AbstractProcessor(ABC):
     @abstractmethod
     def __call__(self, sequences: list[str], random_seed: int) -> list[list[float]]:
         pass
+
+
+class ThreadPoolHTTPServer(HTTPServer):
+    def __init__(self, endpoint, request_handler):
+        super().__init__(endpoint, request_handler)
+        self._pool = ThreadPoolExecutor(max_workers=1)
+
+    def process_request_thread(self, request: socket | tuple[bytes, socket], client_address: tuple[str, int]):
+        try:
+            self.finish_request(request, client_address)
+        except Exception:
+            self.handle_error(request, client_address)
+        finally:
+            self.shutdown_request(request)
+
+    def process_request(self, request: socket | tuple[bytes, socket], client_address: tuple[str, int]):
+        self._pool.submit(self.process_request_thread, request=request, client_address=client_address)
+
+    def server_close(self):
+        super().server_close()
+        self._pool.shutdown()
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -108,4 +130,4 @@ class _Handler(BaseHTTPRequestHandler):
 
 
 def create_server(endpoint: tuple[str, int], batch_size: int, processor: AbstractProcessor) -> HTTPServer:
-    return HTTPServer(endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor))
+    return ThreadPoolHTTPServer(endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor))
