@@ -5,6 +5,7 @@ import json
 from abc import ABC, abstractmethod
 import functools
 from socket import socket
+from socketserver import ThreadingMixIn
 
 
 MAX_SEQUENCE_LENGTH = 4096
@@ -36,25 +37,12 @@ class AbstractProcessor(ABC):
         pass
 
 
-class ThreadPoolHTTPServer(HTTPServer):
-    def __init__(self, endpoint, request_handler):
-        super().__init__(endpoint, request_handler)
-        self._pool = ThreadPoolExecutor(max_workers=1)
+class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
+    """Allow concurrent requests to the HTTP server
 
-    def process_request_thread(self, request: socket | tuple[bytes, socket], client_address: tuple[str, int]):
-        try:
-            self.finish_request(request, client_address)
-        except Exception:
-            self.handle_error(request, client_address)
-        finally:
-            self.shutdown_request(request)
-
-    def process_request(self, request: socket | tuple[bytes, socket], client_address: tuple[str, int]):
-        self._pool.submit(self.process_request_thread, request=request, client_address=client_address)
-
-    def server_close(self):
-        super().server_close()
-        self._pool.shutdown()
+    This makes sure that health probes can be processed immediately and don't
+    need to wait on a previous request handler to finish.
+    """
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -65,9 +53,11 @@ class _Handler(BaseHTTPRequestHandler):
         server: HTTPServer,
         batch_size: int,
         processor: AbstractProcessor,
+        pool: ThreadPoolExecutor,
     ):
         self._batch_size = batch_size
         self._processor = processor
+        self._pool = pool
         super().__init__(request, client_address, server)
 
     def do_POST(self):
@@ -126,8 +116,18 @@ class _Handler(BaseHTTPRequestHandler):
         if any(len(seq) > MAX_SEQUENCE_LENGTH for seq in request.sequences):
             raise BadRequestError(f"Maximum sequence length exceeded ({MAX_SEQUENCE_LENGTH})")
 
-        return Response(scores=self._processor(request.sequences, request.random_seed))
+        scores = self._pool.submit(self._processor, request.sequences, request.random_seed).result()
+
+        return Response(scores=scores)
 
 
 def create_server(endpoint: tuple[str, int], batch_size: int, processor: AbstractProcessor) -> HTTPServer:
-    return ThreadPoolHTTPServer(endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor))
+    # Here we a use a pool with a worker size of 1 as a way to serialize
+    # calls to the processor. The contract is that the resource constraints
+    # given to the custom predictor are for a single invocation of it, so
+    # if we do get parallel requests we serialize them in order not to exceed
+    # our resource limits.
+    pool = ThreadPoolExecutor(max_workers=1)
+    return ThreadingHTTPServer(
+        endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor, pool=pool)
+    )
