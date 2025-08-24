@@ -1,9 +1,11 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from concurrent.futures import ThreadPoolExecutor
 import dataclasses
 import json
 from abc import ABC, abstractmethod
 import functools
 from socket import socket
+from socketserver import ThreadingMixIn
 
 
 MAX_SEQUENCE_LENGTH = 4096
@@ -35,6 +37,14 @@ class AbstractProcessor(ABC):
         pass
 
 
+class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
+    """Allow concurrent requests to the HTTP server
+
+    This makes sure that health probes can be processed immediately and don't
+    need to wait on a previous request handler to finish.
+    """
+
+
 class _Handler(BaseHTTPRequestHandler):
     def __init__(
         self,
@@ -43,9 +53,11 @@ class _Handler(BaseHTTPRequestHandler):
         server: HTTPServer,
         batch_size: int,
         processor: AbstractProcessor,
+        pool: ThreadPoolExecutor,
     ):
         self._batch_size = batch_size
         self._processor = processor
+        self._pool = pool
         super().__init__(request, client_address, server)
 
     def do_POST(self):
@@ -104,8 +116,18 @@ class _Handler(BaseHTTPRequestHandler):
         if any(len(seq) > MAX_SEQUENCE_LENGTH for seq in request.sequences):
             raise BadRequestError(f"Maximum sequence length exceeded ({MAX_SEQUENCE_LENGTH})")
 
-        return Response(scores=self._processor(request.sequences, request.random_seed))
+        scores = self._pool.submit(self._processor, request.sequences, request.random_seed).result()
+
+        return Response(scores=scores)
 
 
 def create_server(endpoint: tuple[str, int], batch_size: int, processor: AbstractProcessor) -> HTTPServer:
-    return HTTPServer(endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor))
+    # Here we a use a pool with a worker size of 1 as a way to serialize
+    # calls to the processor. The contract is that the resource constraints
+    # given to the custom predictor are for a single invocation of it, so
+    # if we do get parallel requests we serialize them in order not to exceed
+    # our resource limits.
+    pool = ThreadPoolExecutor(max_workers=1)
+    return ThreadingHTTPServer(
+        endpoint, functools.partial(_Handler, batch_size=batch_size, processor=processor, pool=pool)
+    )
