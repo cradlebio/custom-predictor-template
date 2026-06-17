@@ -17,8 +17,8 @@ version = "0.1.0"
 #   "numpy>=2.1"
 # ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "ruff>=0.11.4",
     "pyright>=1.1.402",
     "pre-commit>=2.9.2",

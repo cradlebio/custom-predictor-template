@@ -4,7 +4,7 @@ RUN apk add --no-cache curl
 
 ENV XDG_BIN_HOME=/usr/local/bin
 ENV UV_NO_MODIFY_PATH=1
-RUN curl -LsSf https://astral.sh/uv/0.7.19/install.sh | sh
+RUN curl -LsSf https://astral.sh/uv/0.11.21/install.sh | sh
 
 WORKDIR /app
 COPY custom_predictor /app/custom_predictor/
