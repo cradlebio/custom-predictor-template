@@ -7,6 +7,9 @@ It provides the following templates:
 - [uv](uv): A more elaborate example that uses the `uv` package manager
    and demonstrates additional features.
 
+In addition, the [examples](examples) directory provides small examples
+that demonstrate how to use custom predictors on Cradle.
+
 ## Custom predictor contract
 
 In order for Cradle to use a custom predictor, it must adhere to this contract,

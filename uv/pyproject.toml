@@ -19,9 +19,6 @@ version = "0.1.0"
 
 [dependency-groups]
 dev = [
-    "ruff>=0.11.4",
-    "pyright>=1.1.402",
-    "pre-commit>=2.9.2",
     "pytest>=8.4.0",
 ]
 
