@@ -58,7 +58,7 @@ assert cp is not None
 cp_version = cp.root.version_id
 cp_outputs = cp.root.outputs
 print(cp_outputs)
-cp_output = cp.root.outputs[0]
+cp_output = cp.root.outputs[0]  # !!! A custom predictor might have multiple outputs, here we are only using the first
 cp_inputs = cp.root.inputs
 print(cp_inputs)
 cp_name = cp.root.name
