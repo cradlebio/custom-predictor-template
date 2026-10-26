@@ -128,7 +128,7 @@ engineer_filterers = [
                 ),
                 threshold=RelativeTo(
                     reference=template_monomer,
-                    margin=1.0,
+                    margin=0.0,  # margin is always additive for custom predictors
                 ),
             ),
         ],
