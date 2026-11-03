@@ -7,9 +7,11 @@ MAX_DESCRIPTION_LENGTH = 1024
 DNS1123_PATTERN = re.compile("^[a-z0-9]([-a-z0-9]*[a-z0-9])?$")
 MAX_INPUTS = 64
 MAX_OUTPUTS = 64
-MAX_CPU_MCORES = 8000
-MAX_MAIN_MEMORY_MIB = 64 * 1024 * 1024 * 1024
-MAX_GPU_MEMORY_MIB = 16 * 1024 * 1024 * 1024
+MIN_CPU_MCORES = 500
+MAX_CPU_MCORES = 16000
+MIN_MAIN_MEMORY_MIB = 64
+MAX_MAIN_MEMORY_MIB = 64 * 1024
+MAX_GPU_MEMORY_MIB = 80 * 1024
 
 
 def test_metadata():
@@ -26,9 +28,9 @@ def test_metadata():
 
     assert all(x.type in (bool, int, float, str) for x in METADATA.inputs)
 
-    assert METADATA.cpu_mcores > 0
+    assert METADATA.cpu_mcores >= MIN_CPU_MCORES
     assert METADATA.cpu_mcores <= MAX_CPU_MCORES
-    assert METADATA.main_memory_mib > 0
+    assert METADATA.main_memory_mib >= MIN_MAIN_MEMORY_MIB
     assert METADATA.main_memory_mib <= MAX_MAIN_MEMORY_MIB
     assert METADATA.gpu_memory_mib >= 0
     assert METADATA.gpu_memory_mib <= MAX_GPU_MEMORY_MIB

@@ -38,9 +38,11 @@ imported into a Cradle workspace. The metadata consist of the following fields:
 - `batch_size`: The maximum number of sequences that the custom predictor will be
    invoked with at a time. It may be invoked with fewer sequences.
 - `cpu_mcores`: How much CPU compute the custom predictor consumes per invocation, in
-   millicores
+   millicores (500 to 16000)
 - `main_memory_mib`: How much RAM the custom predictor consumes per invocation, in MiB
+   (64 to 65536)
 - `gpu_memory_mib`: How much GPU memory the custom predictor consumes per invocation, in MiB
+   (0 to 81920)
 
 These metadata serve three purposes:
 
