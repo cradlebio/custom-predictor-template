@@ -17,7 +17,7 @@ METADATA = CustomPredictorMetadata(
         CustomPredictorOutput(assay_id="subseq_count", name="Subsequence count"),
     ),
     batch_size=1024,
-    cpu_mcores=100,
+    cpu_mcores=500,
     main_memory_mib=128,
     gpu_memory_mib=0,
 )

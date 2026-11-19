@@ -7,7 +7,7 @@
     "inputs": [],
     "outputs": [{"assay_id": "alanine_count", "name": "Alanine count"}],
     "batch_size": 1024,
-    "cpu_mcores": 100,
+    "cpu_mcores": 500,
     "main_memory_mib": 128,
     "gpu_memory_mib": 0
 }
