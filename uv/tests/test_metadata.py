@@ -11,6 +11,7 @@ MIN_CPU_MCORES = 500
 MAX_CPU_MCORES = 16000
 MIN_MAIN_MEMORY_MIB = 64
 MAX_MAIN_MEMORY_MIB = 64 * 1024
+MIN_GPU_MEMORY_MIB = 0
 MAX_GPU_MEMORY_MIB = 80 * 1024
 
 
@@ -32,5 +33,5 @@ def test_metadata():
     assert METADATA.cpu_mcores <= MAX_CPU_MCORES
     assert METADATA.main_memory_mib >= MIN_MAIN_MEMORY_MIB
     assert METADATA.main_memory_mib <= MAX_MAIN_MEMORY_MIB
-    assert METADATA.gpu_memory_mib >= 0
+    assert METADATA.gpu_memory_mib >= MIN_GPU_MEMORY_MIB
     assert METADATA.gpu_memory_mib <= MAX_GPU_MEMORY_MIB
