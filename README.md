@@ -87,4 +87,5 @@ was launched.
 Cradle only submits a single request at a time to a custom predictor instance, and so
 the custom predictor does not need to support concurrent requests. However, while a
 request is pending, it might connect to the server without making a request to probe
-for its liveness/existence.
+for its liveness/existence. A request must be responded to within a duration of 5 minutes,
+and the predictor's `batch_size` should be tuned so this is achieved.
